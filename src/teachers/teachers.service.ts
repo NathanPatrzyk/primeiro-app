@@ -1,25 +1,60 @@
-import { Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
+import { CreateTeacherDto } from './dto/create-teacher.dto';
+import { UpdateTeacherDto } from './dto/update-teacher.dto';
 
 @Injectable()
 export class TeachersService {
-  findAllTeachers() {
-    return [
-      {
-        id: 1,
-        teacher: 'José',
-      },
-      {
-        id: 2,
-        teacher: 'João',
-      },
-      {
-        id: 3,
-        teacher: 'Maria',
-      },
-    ];
+  private teachers = [
+    {
+      id: 1,
+      name: 'Nome do Professor',
+    },
+  ];
+
+  findAll() {
+    return this.teachers;
   }
 
-  findOneTeachers() {
-    return 'Retornando um único professor';
+  find(id: string) {
+    const teacher = this.teachers.find((teacher) => teacher.id === Number(id));
+
+    if (teacher) return teacher;
+
+    throw new HttpException('Esse Professor Não Existe!', HttpStatus.NOT_FOUND);
+  }
+
+  create(createTeacherDto: CreateTeacherDto) {
+    const newId = this.teachers.length + 1;
+
+    const newTeacher = {
+      id: newId,
+      ...createTeacherDto,
+    };
+
+    this.teachers.push(newTeacher);
+
+    return newTeacher;
+  }
+
+  update(id: string, updateTeacherDto: UpdateTeacherDto) {
+    const teacherIndex = this.teachers.findIndex(
+      (teacher) => teacher.id === Number(id),
+    );
+
+    if (teacherIndex < 0) {
+      throw new HttpException(
+        'Esse Professor Não Existe!',
+        HttpStatus.NOT_FOUND,
+      );
+    }
+
+    const teacherItem = this.teachers[teacherIndex];
+
+    this.teachers[teacherIndex] = {
+      ...teacherItem,
+      ...updateTeacherDto,
+    };
+
+    return this.teachers[teacherIndex];
   }
 }
