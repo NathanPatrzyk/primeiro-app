@@ -21,13 +21,13 @@ export class TeachersController {
   }
 
   @Get(':id')
-  find() {
-    return this.teachersService.find();
+  find(@Param('id') id: string) {
+    return this.teachersService.find(id);
   }
 
   @Post()
   create(@Body() createTeacherDto: CreateTeacherDto) {
-    return this.teachersService.create();
+    return this.teachersService.create(createTeacherDto);
   }
 
   @Patch(':id')

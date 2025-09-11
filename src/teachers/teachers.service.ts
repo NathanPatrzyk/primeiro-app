@@ -57,4 +57,21 @@ export class TeachersService {
 
     return this.teachers[teacherIndex];
   }
+
+  delete(id: string) {
+    const teacherIndex = this.teachers.findIndex(
+      (teacher) => teacher.id === Number(id),
+    );
+
+    if (teacherIndex < 0) {
+      throw new HttpException(
+        'Esse Professor Não Existe!',
+        HttpStatus.NOT_FOUND,
+      );
+    }
+
+    this.teachers.splice(teacherIndex, 1);
+
+    return 'Professor Excluído com Sucesso!';
+  }
 }
