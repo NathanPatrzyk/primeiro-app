@@ -21,8 +21,8 @@ export class TeachersController {
   }
 
   @Get(':id')
-  find(@Param('id') id: string) {
-    return this.teachersService.find(id);
+  findOne(@Param('id') id: string) {
+    return this.teachersService.findOne(id);
   }
 
   @Post()

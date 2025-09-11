@@ -15,7 +15,7 @@ export class TeachersService {
     return this.teachers;
   }
 
-  find(id: string) {
+  findOne(id: string) {
     const teacher = this.teachers.find((teacher) => teacher.id === Number(id));
 
     if (teacher) return teacher;

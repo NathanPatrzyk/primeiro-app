@@ -20,8 +20,8 @@ export class GuestsController {
   }
 
   @Get(':id')
-  find(@Param('id') id: string) {
-    return this.guestsService.find(id);
+  findOne(@Param('id') id: string) {
+    return this.guestsService.findOne(id);
   }
 
   @Post()

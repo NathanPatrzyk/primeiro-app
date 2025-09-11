@@ -15,7 +15,7 @@ export class GuestsService {
     return this.guests;
   }
 
-  find(id: string) {
+  findOne(id: string) {
     const guest = this.guests.find((guest) => guest.id === Number(id));
 
     if (guest) return guest;

@@ -15,7 +15,7 @@ export class UsersService {
     return this.users;
   }
 
-  find(id: string) {
+  findOne(id: string) {
     const user = this.users.find((user) => user.id === Number(id));
 
     if (user) return user;

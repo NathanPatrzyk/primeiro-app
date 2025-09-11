@@ -18,7 +18,7 @@ export class TasksService {
     return this.tasks;
   }
 
-  find(id: string) {
+  findOne(id: string) {
     const task = this.tasks.find((task) => task.id === Number(id));
 
     if (task) return task;

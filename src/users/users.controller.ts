@@ -21,8 +21,8 @@ export class UsersController {
   }
 
   @Get(':id')
-  find(@Param('id') id: string) {
-    return this.usersService.find(id);
+  findOne(@Param('id') id: string) {
+    return this.usersService.findOne(id);
   }
 
   @Post()
