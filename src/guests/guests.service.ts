@@ -15,8 +15,8 @@ export class GuestsService {
     return this.guests;
   }
 
-  findOne(id: string) {
-    const guest = this.guests.find((guest) => guest.id === Number(id));
+  findOne(id: number) {
+    const guest = this.guests.find((guest) => guest.id === id);
 
     if (guest) return guest;
 
@@ -36,10 +36,8 @@ export class GuestsService {
     return newGuest;
   }
 
-  update(id: string, updateGuestDto: UpdateGuestDto) {
-    const guestIndex = this.guests.findIndex(
-      (guest) => guest.id === Number(id),
-    );
+  update(id: number, updateGuestDto: UpdateGuestDto) {
+    const guestIndex = this.guests.findIndex((guest) => guest.id === id);
 
     if (guestIndex < 0) {
       throw new HttpException(
@@ -58,10 +56,8 @@ export class GuestsService {
     return this.guests[guestIndex];
   }
 
-  delete(id: string) {
-    const guestIndex = this.guests.findIndex(
-      (guest) => guest.id === Number(id),
-    );
+  delete(id: number) {
+    const guestIndex = this.guests.findIndex((guest) => guest.id === id);
 
     if (guestIndex < 0) {
       throw new HttpException(

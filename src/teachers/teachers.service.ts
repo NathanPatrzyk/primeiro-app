@@ -15,8 +15,8 @@ export class TeachersService {
     return this.teachers;
   }
 
-  findOne(id: string) {
-    const teacher = this.teachers.find((teacher) => teacher.id === Number(id));
+  findOne(id: number) {
+    const teacher = this.teachers.find((teacher) => teacher.id === id);
 
     if (teacher) return teacher;
 
@@ -36,9 +36,9 @@ export class TeachersService {
     return newTeacher;
   }
 
-  update(id: string, updateTeacherDto: UpdateTeacherDto) {
+  update(id: number, updateTeacherDto: UpdateTeacherDto) {
     const teacherIndex = this.teachers.findIndex(
-      (teacher) => teacher.id === Number(id),
+      (teacher) => teacher.id === id,
     );
 
     if (teacherIndex < 0) {
@@ -58,9 +58,9 @@ export class TeachersService {
     return this.teachers[teacherIndex];
   }
 
-  delete(id: string) {
+  delete(id: number) {
     const teacherIndex = this.teachers.findIndex(
-      (teacher) => teacher.id === Number(id),
+      (teacher) => teacher.id === id,
     );
 
     if (teacherIndex < 0) {
