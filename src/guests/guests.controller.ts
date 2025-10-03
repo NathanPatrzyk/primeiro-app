@@ -7,17 +7,19 @@ import {
   ParseIntPipe,
   Patch,
   Post,
+  Query,
 } from '@nestjs/common';
 import { GuestsService } from './guests.service';
 import { CreateGuestDto } from './dto/create-guest.dto';
+import { PaginationDto } from 'src/common/dto/pagination.dto';
 
 @Controller('guests')
 export class GuestsController {
   constructor(private readonly guestsService: GuestsService) {}
 
   @Get()
-  findAll() {
-    return this.guestsService.findAll();
+  findAll(@Query() paginationDto: PaginationDto) {
+    return this.guestsService.findAll(paginationDto);
   }
 
   @Get(':id')

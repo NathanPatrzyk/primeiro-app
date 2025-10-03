@@ -30,7 +30,7 @@ export class TasksService {
 
     if (task?.name) return task;
 
-    throw new HttpException('Essa Tarefa Não Existe!', HttpStatus.NOT_FOUND);
+    throw new HttpException('Essa tarefa não existe!', HttpStatus.NOT_FOUND);
   }
 
   async create(createTaskDto: CreateTaskDto) {
