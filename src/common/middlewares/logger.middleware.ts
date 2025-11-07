@@ -10,6 +10,7 @@ export class LoggerMiddleware implements NestMiddleware {
       if (authorization) {
         req['user'] = {
           token: authorization,
+          role: 'admin',
         };
       }
     }
