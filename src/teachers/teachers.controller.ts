@@ -7,18 +7,20 @@ import {
   ParseIntPipe,
   Patch,
   Post,
+  Query,
 } from '@nestjs/common';
 import { TeachersService } from './teachers.service';
 import { CreateTeacherDto } from './dto/create-teacher.dto';
 import { UpdateTeacherDto } from './dto/update-teacher.dto';
+import { PaginationDto } from 'src/common/dto/pagination.dto';
 
 @Controller('teachers')
 export class TeachersController {
   constructor(private readonly teachersService: TeachersService) {}
 
   @Get()
-  findAll() {
-    return this.teachersService.findAll();
+  findAll(@Query() paginationDto: PaginationDto) {
+    return this.teachersService.findAll(paginationDto);
   }
 
   @Get(':id')

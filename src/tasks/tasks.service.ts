@@ -40,14 +40,15 @@ export class TasksService {
           name: createTaskDto.name,
           description: createTaskDto.description,
           completed: false,
+          userId: createTaskDto.userId,
         },
       });
 
       return newTask;
     } catch (e) {
       throw new HttpException(
-        'Não foi possível cadastrar a tarefa!',
-        HttpStatus.BAD_REQUEST,
+        'Essa tarefa não foi criada!',
+        HttpStatus.NOT_FOUND,
       );
     }
   }
@@ -70,7 +71,15 @@ export class TasksService {
         where: {
           id: findTask.id,
         },
-        data: updateTaskDto,
+        data: {
+          name: updateTaskDto.name ? updateTaskDto.name : findTask.name,
+          description: updateTaskDto.description
+            ? updateTaskDto.description
+            : findTask.description,
+          completed: updateTaskDto.completed
+            ? updateTaskDto.completed
+            : findTask.completed,
+        },
       });
 
       return task;

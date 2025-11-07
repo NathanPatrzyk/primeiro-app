@@ -1,77 +1,112 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { CreateTeacherDto } from './dto/create-teacher.dto';
 import { UpdateTeacherDto } from './dto/update-teacher.dto';
+import { PrismaService } from 'src/prisma/prisma.service';
+import { PaginationDto } from 'src/common/dto/pagination.dto';
 
 @Injectable()
 export class TeachersService {
-  private teachers = [
-    {
-      id: 1,
-      name: 'Nome do Professor',
-    },
-  ];
+  constructor(private readonly prismaService: PrismaService) {}
 
-  findAll() {
-    return this.teachers;
+  async findAll(paginationDto: PaginationDto) {
+    const { limit = 10, offset = 0 } = paginationDto;
+
+    const allTeachers = await this.prismaService.teacher.findMany({
+      take: limit,
+      skip: offset,
+      orderBy: {
+        created: 'desc',
+      },
+    });
+    return allTeachers;
   }
 
-  findOne(id: number) {
-    const teacher = this.teachers.find((teacher) => teacher.id === id);
+  async findOne(id: number) {
+    const teacher = await this.prismaService.teacher.findFirst({
+      where: {
+        id: id,
+      },
+    });
 
-    if (teacher) return teacher;
+    if (teacher?.name) return teacher;
 
-    throw new HttpException('Esse Professor Não Existe!', HttpStatus.NOT_FOUND);
+    throw new HttpException('Esse professor não existe!', HttpStatus.NOT_FOUND);
   }
 
-  create(createTeacherDto: CreateTeacherDto) {
-    const newId = this.teachers.length + 1;
+  async create(createTeacherDto: CreateTeacherDto) {
+    try {
+      const newTeacher = await this.prismaService.teacher.create({
+        data: {
+          name: createTeacherDto.name,
+        },
+      });
 
-    const newTeacher = {
-      id: newId,
-      ...createTeacherDto,
-    };
-
-    this.teachers.push(newTeacher);
-
-    return newTeacher;
-  }
-
-  update(id: number, updateTeacherDto: UpdateTeacherDto) {
-    const teacherIndex = this.teachers.findIndex(
-      (teacher) => teacher.id === id,
-    );
-
-    if (teacherIndex < 0) {
+      return newTeacher;
+    } catch (e) {
       throw new HttpException(
-        'Esse Professor Não Existe!',
-        HttpStatus.NOT_FOUND,
+        'Não foi possível cadastrar o professor!',
+        HttpStatus.BAD_REQUEST,
       );
     }
-
-    const teacherItem = this.teachers[teacherIndex];
-
-    this.teachers[teacherIndex] = {
-      ...teacherItem,
-      ...updateTeacherDto,
-    };
-
-    return this.teachers[teacherIndex];
   }
 
-  delete(id: number) {
-    const teacherIndex = this.teachers.findIndex(
-      (teacher) => teacher.id === id,
-    );
+  async update(id: number, updateTeacherDto: UpdateTeacherDto) {
+    try {
+      const findTeacher = await this.prismaService.teacher.findFirst({
+        where: {
+          id: id,
+        },
+      });
 
-    if (teacherIndex < 0) {
+      if (!findTeacher)
+        throw new HttpException(
+          'Esse professor não existe!',
+          HttpStatus.NOT_FOUND,
+        );
+
+      const teacher = await this.prismaService.teacher.update({
+        where: {
+          id: findTeacher.id,
+        },
+        data: updateTeacherDto,
+      });
+
+      return teacher;
+    } catch (e) {
       throw new HttpException(
-        'Esse Professor Não Existe!',
-        HttpStatus.NOT_FOUND,
+        'Não foi possível atualizar o professor!',
+        HttpStatus.BAD_REQUEST,
       );
     }
+  }
 
-    this.teachers.splice(teacherIndex, 1);
+  async delete(id: number) {
+    try {
+      const findTeacher = await this.prismaService.teacher.findFirst({
+        where: {
+          id: id,
+        },
+      });
 
-    return 'Professor Excluído com Sucesso!';
+      if (!findTeacher) {
+        throw new HttpException(
+          'Esse professor não existe!',
+          HttpStatus.NOT_FOUND,
+        );
+      }
+
+      await this.prismaService.teacher.delete({
+        where: {
+          id: findTeacher.id,
+        },
+      });
+
+      return 'Professor excluído com sucesso!';
+    } catch (e) {
+      throw new HttpException(
+        'Não foi possível deletar o usuário',
+        HttpStatus.BAD_REQUEST,
+      );
+    }
   }
 }
