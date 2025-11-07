@@ -8,13 +8,16 @@ import {
   Patch,
   Post,
   Query,
+  UseInterceptors,
 } from '@nestjs/common';
 import { TeachersService } from './teachers.service';
 import { CreateTeacherDto } from './dto/create-teacher.dto';
 import { UpdateTeacherDto } from './dto/update-teacher.dto';
 import { PaginationDto } from 'src/common/dto/pagination.dto';
+import { LoggerInterceptor } from 'src/common/interceptors/logger.interceptor';
 
 @Controller('teachers')
+@UseInterceptors(LoggerInterceptor)
 export class TeachersController {
   constructor(private readonly teachersService: TeachersService) {}
 
