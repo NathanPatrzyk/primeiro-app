@@ -7,7 +7,7 @@ datasource db {
   url          = env("DATABASE_URL")
 }
 
-model Task {
+model Task{
   id           Int @id @default(autoincrement())
   name         String
   description  String
