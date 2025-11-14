@@ -13,16 +13,17 @@ import { UsersModule } from 'src/users/users.module';
 import { LoggerMiddleware } from 'src/common/middlewares/logger.middleware';
 import { APP_GUARD } from '@nestjs/core';
 import { AuthAdminGuard } from 'src/common/guards/admin.guard';
+import { AuthModule } from 'src/auth/auth.module';
 
 @Module({
-  imports: [GuestsModule, TasksModule, TeachersModule, UsersModule],
+  imports: [GuestsModule, TasksModule, TeachersModule, UsersModule, AuthModule],
   controllers: [AppController],
   providers: [
     AppService,
-    {
-      provide: APP_GUARD,
-      useClass: AuthAdminGuard,
-    },
+    // {
+    //   provide: APP_GUARD,
+    //   useClass: AuthAdminGuard,
+    // },
   ],
 })
 export class AppModule implements NestModule {
