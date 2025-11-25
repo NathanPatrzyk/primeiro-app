@@ -19,6 +19,7 @@ import { LoggerInterceptor } from 'src/common/interceptors/logger.interceptor';
 import { BodyCreateTaskInterceptor } from 'src/common/interceptors/body-create-task.interceptor';
 import { AddHeaderInterceptor } from 'src/common/interceptors/add-header.interceptor';
 import { AuthAdminGuard } from 'src/common/guards/admin.guard';
+import { AuthTokenGuard } from 'src/auth/guard/auth-token.guard';
 
 @Controller('tasks')
 @UseInterceptors(LoggerInterceptor)
@@ -26,6 +27,7 @@ import { AuthAdminGuard } from 'src/common/guards/admin.guard';
 export class TasksController {
   constructor(private readonly tasksService: TasksService) {}
 
+  @UseGuards(AuthTokenGuard)
   @Get()
   @UseInterceptors(LoggerInterceptor)
   @UseInterceptors(AddHeaderInterceptor)
@@ -33,17 +35,20 @@ export class TasksController {
     return this.tasksService.findAll(paginationDto);
   }
 
+  @UseGuards(AuthTokenGuard)
   @Get(':id')
   findOne(@Param('id', ParseIntPipe) id: number) {
     return this.tasksService.findOne(id);
   }
 
+  @UseGuards(AuthTokenGuard)
   @Post()
   @UseInterceptors(BodyCreateTaskInterceptor)
   create(@Body() createTaskDto: CreateTaskDto) {
     return this.tasksService.create(createTaskDto);
   }
 
+  @UseGuards(AuthTokenGuard)
   @Patch(':id')
   update(
     @Param('id', ParseIntPipe) id: number,
@@ -52,6 +57,7 @@ export class TasksController {
     return this.tasksService.update(id, updateTaskDto);
   }
 
+  @UseGuards(AuthTokenGuard)
   @Delete(':id')
   delete(@Param('id', ParseIntPipe) id: number) {
     return this.tasksService.delete(id);
